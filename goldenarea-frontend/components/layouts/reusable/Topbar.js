@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,9 +15,21 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/Inbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import Link from "next/link";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function ButtonAppBar() {
   const [drawer, setDrawer] = useState(false);
+  const { currentUser, logout } = useCurrentUser();
+  const [auth, setAuth] = useState("");
+
+  useEffect(() => {
+    if (currentUser) {
+      setAuth("logout");
+    } else {
+      setAuth("login");
+    }
+  }, [currentUser]);
+  
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -38,9 +50,15 @@ export default function ButtonAppBar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Golden Area
             </Typography>
+            {auth === "logout" ? (
+              <Button onClick={logout} color="inherit">
+                logout
+              </Button>
+            ) : (
             <Button color="inherit" href="/login">
               login
             </Button>
+            )}
           </Toolbar>
         </AppBar>
       </Box>
