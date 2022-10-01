@@ -4,16 +4,29 @@ import { useEffect, useState } from "react";
 
 export default function Profile() {
   const { currentUser, fetcherWithToken } = useCurrentUser();
-  const [blogs, setBlogs] = useState([]);
+  const [users, setUsers] = useState([]);
   useEffect(() => {
     if (currentUser) {
       fetcherWithToken(
-        "https://sakko-demo-api.herokuapp.com/api/v1/user/blogs"
+        "http://localhost:8080/users"
       ).then((json) => {
-        console.log("blog", json);
-        setBlogs(json);
+        // console.log("users", json);
+        setUsers(json);
       });
     }
   }, [currentUser]);
-  return <SessionLayout>{JSON.stringify(blogs)}</SessionLayout>;
+  // return <SessionLayout>{JSON.stringify(users)}</SessionLayout>;
+  return (
+    <SessionLayout>
+      <div>
+        <div>All User Profile</div>
+        {/* <p>{JSON.stringify(users)}</p> */}
+        <ul>
+          {users.map((user) => (
+            <li key={user.ID}>{user.username}</li>
+          ))}
+        </ul>
+      </div>
+    </SessionLayout>
+  );
 }

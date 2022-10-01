@@ -29,26 +29,25 @@ export default function useCurrentUser() {
     if (!options.headers) {
       options.headers = {};
     }
-    options.headers["auth-token"] = `Bearer ${token}`;
+    options.headers["Authorization"] = `Bearer ${token}`;
     return await fetcher(...args);
   };
 
   const logout = async () => {
-    const url = "https://sakko-demo-api.herokuapp.com/api/v1/user/sign_out";
-    const response = await fetcherWithToken(url, { method: "DELETE" });
     dispatch(resetAll());
     window.location = "/login";
   };
 
   const { data: userData } = useSWR(
     token.length > 0
-      ? "https://sakko-demo-api.herokuapp.com/api/v1/user/me"
+      ? "http://localhost:8080/user"
       : null,
     fetcherWithToken
   );
   useEffect(() => {
     if (userData) {
-      dispatch(setUser(userData.user));
+      // console.log("userData", userData);
+      dispatch(setUser(userData.username));
     }
   }, [userData]);
 
